@@ -19,7 +19,7 @@ const restricted =  (req, res, next) => {
   */
  const token = req.headers.authorization
  if (!token) {
-  return next({ status: 401, message: 'Token require' })
+  return next({ status: 401, message: 'Token required' })
  }
  jwt.verify(token, JWT_SECRET, (err, decodedToken) => {
   if (err) {
@@ -42,7 +42,11 @@ const only = role_name => (req, res, next) => {
 
     Pull the decoded token from the req object, to avoid verifying it again!
   */
- next()
+ if (role_name === req.decodedToken.role_name) {
+  next()
+ } else {
+  next({ status: 403, message: 'This is not for you' })
+ }
 }
 
 
