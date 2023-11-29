@@ -49,14 +49,14 @@ router.post("/login", checkUsernameExists, (req, res, next) => {
       "role_name": "admin" // the role of the authenticated user
     }
    */
-  if (bcrypt.compareSync(req.body.password, req.user.password)) {
+  if (bcrypt. compareSync(req.body.password, req.user.password)) {
     const token = buildToken(req.user)
     res.json({
       message: `${req.user.username} is back!`,
       token,
     })
   } else {
-    next({ status: 200, message: 'Invalid credentials' })
+    next({ status: 401, message: 'Invalid credentials' })
   }
 });
 
@@ -71,5 +71,4 @@ function buildToken(user) {
   }
   return jwt.sign(payload, JWT_SECRET, options)
 }
-
 module.exports = router;
